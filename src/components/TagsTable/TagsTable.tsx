@@ -8,13 +8,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { useGetTagsQuery } from "../../store/api/tagsApi.ts";
+import {useGetTagsQuery} from "../../store/api/tagsApi.ts";
 import TagsTableItem from "../TagsTableItem/TagsTableItem.tsx";
 import Loader from "../Loader/Loader.tsx";
-import Message from "../Message/Message.tsx";
+import ItemsPerPageInput from "../RowsPerPageInput/ItemsPerPageInput.tsx";
+import {Alert, Box} from "@mui/material";
 
 const TagsTable = () => {
-    const { data, error, isLoading } = useGetTagsQuery();
+    const {data, error, isLoading} = useGetTagsQuery();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
@@ -31,12 +32,11 @@ const TagsTable = () => {
         setOrderBy(property);
     };
 
-    console.log(error);
     if (error) {
         if ('status' in error) {
-            return <Message severity="error" text={`An unexpected error occurred with status ${error.status}`} />;
+            return <Alert severity="error">{`An unexpected error occurred with status ${error.status}`}</Alert>
         } else {
-            return <Message severity="error" text="An unknown error occurred" />;
+            return <Alert severity="error">An unexpected error occurred</Alert>
         }
     }
 
@@ -44,14 +44,13 @@ const TagsTable = () => {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event:React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
     const sortedData = data ? stableSort(data.items, getComparator(order, orderBy)) : [];
-
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, sortedData.length - page * rowsPerPage);
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - sortedData.length) : 0;
 
     function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
         if (b[orderBy] < a[orderBy]) {
@@ -89,56 +88,60 @@ const TagsTable = () => {
         return stabilizedThis.map((el) => el[0]);
     }
 
+
     return (
-        <>
-            {isLoading ? <Loader /> :
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 650 }}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center">
-                                    <TableSortLabel
-                                        active={orderBy === 'name'}
-                                        direction={orderBy === 'name' ? order : 'asc'}
-                                        onClick={() => handleSort('name')}
-                                    >
-                                        Name
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell align="center">
-                                    <TableSortLabel
-                                        active={orderBy === 'count'}
-                                        direction={orderBy === 'count' ? order : 'asc'}
-                                        onClick={() => handleSort('count')}
-                                    >
-                                        Count
-                                    </TableSortLabel>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                                <TagsTableItem key={row.name} name={row.name} count={row.count} />
-                            ))}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 53 * emptyRows }}>
-                                    <TableCell colSpan={2} />
+        <Box>
+            {isLoading ? <Loader/> :
+                <Box>
+                    <ItemsPerPageInput setItemsPerPage={setRowsPerPage} setPage={setPage}/>
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="center">
+                                        <TableSortLabel
+                                            active={orderBy === 'name'}
+                                            direction={orderBy === 'name' ? order : 'asc'}
+                                            onClick={() => handleSort('name')}
+                                        >
+                                            Name
+                                        </TableSortLabel>
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <TableSortLabel
+                                            active={orderBy === 'count'}
+                                            direction={orderBy === 'count' ? order : 'asc'}
+                                            onClick={() => handleSort('count')}
+                                        >
+                                            Count
+                                        </TableSortLabel>
+                                    </TableCell>
                                 </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                    <TablePagination
-                        rowsPerPageOptions={[]}
-                        component="div"
-                        count={sortedData.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </TableContainer>
+                            </TableHead>
+                            <TableBody>
+                                {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                                    <TagsTableItem key={row.name} name={row.name} count={row.count}/>
+                                ))}
+                                {emptyRows > 0 && (
+                                    <TableRow style={{height: 53 * emptyRows}}>
+                                        <TableCell colSpan={2}/>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                        <TablePagination
+                            rowsPerPageOptions={[]}
+                            component="div"
+                            count={sortedData.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                    </TableContainer>
+                </Box>
             }
-        </>
+        </Box>
     );
 }
 

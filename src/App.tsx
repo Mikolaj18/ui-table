@@ -1,12 +1,14 @@
-import './App.css'
 import TagsTable from "./components/TagsTable/TagsTable.tsx";
-function App() {
+import {Box} from "@mui/material";
 
-  return (
-    <div>
-        <TagsTable/>
-    </div>
-  )
+function App() {
+    return (
+        <Box>
+            <Box sx={{width: "75%", display: "table", tableLayout: "fixed", m: "auto"}}>
+                <TagsTable/>
+            </Box>
+        </Box>
+    );
 }
 
 export default App

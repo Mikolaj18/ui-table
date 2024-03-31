@@ -11,8 +11,8 @@ const TagsTableItem = ({ name, count }: TagsTableItemProps) => {
             key={name}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
-            <TableCell align="center">{name}</TableCell>
-            <TableCell align="center">{count}</TableCell>
+            <TableCell sx={{width: "50%"}} align="center">{name}</TableCell>
+            <TableCell sx={{width: "50%"}} align="center">{count}</TableCell>
         </TableRow>
     );
 };
