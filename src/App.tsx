@@ -1,11 +1,10 @@
 import './App.css'
-import {useGetTagsQuery} from "./store/api/tagsApi.ts";
-
+import TagsTable from "./components/TagsTable/TagsTable.tsx";
 function App() {
 
   return (
     <div>
-        App
+        <TagsTable/>
     </div>
   )
 }

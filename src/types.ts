@@ -12,7 +12,7 @@ type TCollective = {
     slug: string,
 }
 
-type TTagItem = {
+export type TTagItem = {
     has_synonyms: boolean,
     is_moderator_only: boolean,
     is_required: boolean,
