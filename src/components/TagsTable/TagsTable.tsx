@@ -13,18 +13,16 @@ import TagsTableItem from "../TagsTableItem/TagsTableItem.tsx";
 import Loader from "../Loader/Loader.tsx";
 import {Alert, Box} from "@mui/material";
 import ItemsPerPageInput from "../RowsPerPageInput/ItemsPerPageInput.tsx";
-
+interface Data {
+    name: string,
+    count: number,
+}
 const TagsTable = () => {
     const {data, error, isLoading} = useGetTagsQuery();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
     const [order, setOrder] = useState<Order>('asc');
-
-    interface Data {
-        name: string,
-        count: number,
-    }
 
     const handleSort = (property: keyof Data) => {
         const isAsc = orderBy === property && order === 'asc';
