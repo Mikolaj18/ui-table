@@ -9,7 +9,7 @@ export const tagsApi = createApi({
     endpoints: (builder) => ({
         getTags: builder.query<TApiResponse, void>({
             query: () => ({
-                url: '/2.3/tags?site=stackoverflow',
+                url: '/2ss.3/tags?site=stackoverflow',
             }),
         }),
     }),
