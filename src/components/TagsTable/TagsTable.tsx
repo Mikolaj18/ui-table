@@ -11,8 +11,8 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import {useGetTagsQuery} from "../../store/api/tagsApi.ts";
 import TagsTableItem from "../TagsTableItem/TagsTableItem.tsx";
 import Loader from "../Loader/Loader.tsx";
-import ItemsPerPageInput from "../RowsPerPageInput/ItemsPerPageInput.tsx";
 import {Alert, Box} from "@mui/material";
+import ItemsPerPageInput from "../RowsPerPageInput/ItemsPerPageInput.tsx";
 
 const TagsTable = () => {
     const {data, error, isLoading} = useGetTagsQuery();
@@ -31,14 +31,6 @@ const TagsTable = () => {
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
-
-    if (error) {
-        if ('status' in error) {
-            return <Alert severity="error">{`An unexpected error occurred with status ${error.status}`}</Alert>
-        } else {
-            return <Alert severity="error">An unexpected error occurred</Alert>
-        }
-    }
 
     const handleChangePage = (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
@@ -88,7 +80,13 @@ const TagsTable = () => {
         return stabilizedThis.map((el) => el[0]);
     }
 
-
+    if (error) {
+        if ('status' in error) {
+            return <Alert severity="error">{`An unexpected error occurred with status ${error.status}`}</Alert>;
+        } else {
+            return <Alert severity="error">An unexpected error occurred</Alert>;
+        }
+    }
     return (
         <Box>
             {isLoading ? <Loader/> :
