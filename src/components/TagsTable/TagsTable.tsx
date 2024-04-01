@@ -12,7 +12,7 @@ import {useGetTagsQuery} from "../../store/api/tagsApi.ts";
 import TagsTableItem from "../TagsTableItem/TagsTableItem.tsx";
 import Loader from "../Loader/Loader.tsx";
 import {Alert, Box} from "@mui/material";
-import ItemsPerPageInput from "../RowsPerPageInput/ItemsPerPageInput.tsx";
+import RowsPerPageInput from "../RowsPerPageInput/RowsPerPageInput.tsx";
 interface Data {
     name: string,
     count: number,
@@ -89,7 +89,7 @@ const TagsTable = () => {
         <Box>
             {isLoading ? <Loader/> :
                 <Box>
-                    <ItemsPerPageInput setItemsPerPage={setRowsPerPage} setPage={setPage}/>
+                    <RowsPerPageInput setItemsPerPage={setRowsPerPage} setPage={setPage}/>
                     <TableContainer component={Paper}>
                         <Table>
                             <TableHead>

@@ -7,7 +7,7 @@ type RowsPerPageInputProps = {
     setPage:  React.Dispatch<React.SetStateAction<number>>,
 }
 
-const ItemsPerPageInput = ({setItemsPerPage, setPage}: RowsPerPageInputProps) => {
+const RowsPerPageInput = ({setItemsPerPage, setPage}: RowsPerPageInputProps) => {
     const fieldRef = useRef(document.createElement('input'));
     const [error, setError] = useState(false);
 
@@ -49,4 +49,4 @@ const ItemsPerPageInput = ({setItemsPerPage, setPage}: RowsPerPageInputProps) =>
     );
 };
 
-export default ItemsPerPageInput;
+export default RowsPerPageInput;
