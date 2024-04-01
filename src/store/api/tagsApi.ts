@@ -15,4 +15,4 @@ export const tagsApi = createApi({
     }),
 });
 
-export const {useGetTagsQuery} = tagsApi
+export const {useGetTagsQuery} = tagsApi;
