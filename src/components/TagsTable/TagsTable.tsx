@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -23,7 +23,7 @@ const TagsTable = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
     const [order, setOrder] = useState<Order>('asc');
-
+    const tableRef = useRef(document.createElement('div'));
     const handleSort = (property: keyof Data) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -32,7 +32,10 @@ const TagsTable = () => {
 
     const handleChangePage = (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
-    };
+        if (tableRef.current) {
+            window.scrollTo(0, 0);
+        }
+    }
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
@@ -90,7 +93,7 @@ const TagsTable = () => {
             {isLoading ? <Loader/> :
                 <Box>
                     <RowsPerPageInput setItemsPerPage={setRowsPerPage} setPage={setPage}/>
-                    <TableContainer component={Paper}>
+                    <TableContainer component={Paper} ref={tableRef}>
                         <Table>
                             <TableHead>
                                 <TableRow>
